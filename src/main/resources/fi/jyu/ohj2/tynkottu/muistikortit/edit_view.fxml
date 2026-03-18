@@ -29,10 +29,12 @@
             <TableView fx:id="cardTable" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
-      <ToolBar orientation="VERTICAL" prefHeight="40.0">
+      <ToolBar nodeOrientation="RIGHT_TO_LEFT" orientation="VERTICAL" prefHeight="40.0">
         <items>
             <Button fx:id="cardDeleteButton" mnemonicParsing="false" onAction="#handleCardDelete" text="Delete" />
             <Button fx:id="cardCreateButton" mnemonicParsing="false" onAction="#handleCardCreate" text="Create" />
+            <Button layoutX="10.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+            <Button fx:id="exitButton" layoutX="10.0" layoutY="69.0" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
         </items>
       </ToolBar>
    </children>
