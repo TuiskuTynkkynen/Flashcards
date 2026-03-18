@@ -11,7 +11,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("edit_view.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("card_view.fxml"));
         Scene scene = new Scene(loader.load());
 
         stage.setScene(scene);
