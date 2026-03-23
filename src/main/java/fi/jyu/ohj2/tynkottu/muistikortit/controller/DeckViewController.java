@@ -1,8 +1,8 @@
 package fi.jyu.ohj2.tynkottu.muistikortit.controller;
 
 import fi.jyu.ohj2.tynkottu.muistikortit.App;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
+import fi.jyu.ohj2.tynkottu.muistikortit.model.Deck;
+import fi.jyu.ohj2.tynkottu.muistikortit.model.DeckCollection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,13 +12,16 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DeckViewController implements Initializable {
+    @FXML
+    private Button deckLeftButton;
+    @FXML
+    private Button deckRightButton;
     @FXML
     private Button deckLeft;
     @FXML
@@ -29,25 +32,25 @@ public class DeckViewController implements Initializable {
     private Text deckCenterText;
     @FXML
     private Button deckCenterButton;
+    @FXML
+    private Button deckEditButton;
+    final private DeckCollection deckCollection = new DeckCollection();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        deckLeft.setText("Left Deck Title");
-        deckRight.setText("Right Deck Title");
-
-        deckCenterLabel.setText("Deck Title");
-        deckCenterText.setText("Deck Description");
-
         deckCenterButton.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode() == KeyCode.ENTER){
+            if (keyEvent.getCode() == KeyCode.ENTER) {
                 switchToCardView();
             }
         });
-        deckCenterButton.setOnMouseClicked(mouseEvent ->  {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == 2){
+        deckCenterButton.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == 2) {
                 switchToCardView();
             }
         });
+
+        deckCollection.getSelectedDeckIndexProperty().addListener(_ -> updateDisplays());
+        updateDisplays();
     }
 
     private void switchToCardView() {
@@ -61,18 +64,59 @@ public class DeckViewController implements Initializable {
         }
     }
 
-    @FXML
-    public void handleDeckCreate(ActionEvent event) {
-        IO.println("Create Deck");
+    private void updateDisplays() {
+        setMainDeckDisplay(deckCollection.getSelectedDeck());
+        setSecondaryDeckDisplay(deckLeft, deckCollection.getOffsetDeck(-1));
+        setSecondaryDeckDisplay(deckRight, deckCollection.getOffsetDeck(1));
+
+        // Hide buttons, if unable to scroll further
+        deckRightButton.setVisible(deckCollection.getSelectedDeckIndex() < deckCollection.size() - 1);
+        deckLeftButton.setVisible(deckCollection.getSelectedDeckIndex() > 0);
+    }
+
+    private void setMainDeckDisplay(Deck deck) {
+        if (deck == null) {
+            deckCenterButton.setDisable(true);
+            deckCenterText.setText("Create a deck");
+
+            deckCenterLabel.setVisible(false);
+            deckEditButton.setVisible(false);
+            return;
+        }
+
+        deckCenterButton.setDisable(false);
+        deckCenterLabel.setText(deck.getTitle());
+        deckCenterText.setText(deck.getDescription());
+
+        deckCenterLabel.setVisible(true);
+        deckEditButton.setVisible(true);
+    }
+
+    private void setSecondaryDeckDisplay(Button display, Deck deck) {
+        if (deck == null) {
+            display.setVisible(false);
+            return;
+        }
+
+        display.setVisible(true);
+        display.setText(deck.getTitle());
     }
 
     @FXML
-    public void handleDeckDelete(ActionEvent event) {
-        IO.println("Delete Deck");
+    public void handleDeckCreate() {
+        deckCollection.addDeck("Title", "Description");
+        deckCollection.setSelectedDeckIndex(deckCollection.size() - 1);
+        updateDisplays();
     }
 
     @FXML
-    public void handleDeckEdit(ActionEvent event) {
+    public void handleDeckDelete() {
+        deckCollection.removeDeck(deckCollection.getSelectedDeck());
+        updateDisplays();
+    }
+
+    @FXML
+    public void handleDeckEdit() {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("edit_view.fxml"));
             Stage stage = (Stage) deckCenterButton.getScene().getWindow();
@@ -84,12 +128,12 @@ public class DeckViewController implements Initializable {
     }
 
     @FXML
-    public void handleDeckLeft(ActionEvent event) {
-        IO.println("Deck Left");
+    public void handleDeckLeft() {
+        deckCollection.selectPrevious();
     }
 
     @FXML
-    public void handleDeckRight(ActionEvent event) {
-        IO.println("Deck Right");
+    public void handleDeckRight() {
+        deckCollection.selectNext();
     }
 }
