@@ -1,0 +1,118 @@
+package fi.jyu.ohj2.tynkottu.muistikortit.model;
+
+import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.Collections;
+
+public class Deck {
+    private final StringProperty title = new SimpleStringProperty("");
+    private final StringProperty description = new SimpleStringProperty("");
+    private final IntegerProperty selectedCardIndex = new SimpleIntegerProperty(0);
+    final private ObservableList<Card> cards = FXCollections.observableArrayList(card -> new Observable[]{
+            card.getTitleProperty(),
+            card.getDescriptionProperty(),
+            card.getFlippedProperty(),
+    });
+
+    @SuppressWarnings("unused")
+    public Deck() { }
+
+    public Deck(String title, String description) {
+        this.title.setValue(title);
+        this.description.setValue(description);
+    }
+
+    public ObservableList<Card> getCards() {
+        return cards;
+    }
+
+    public int size() {
+        return cards.size();
+    }
+
+
+    public void addCard(String title, String description) {
+        cards.add(new Card(title, description));
+    }
+
+    public void removeCard(Card card) {
+        if (card == null) {
+            return;
+        }
+
+        cards.remove(card);
+        if (selectedCardIndex.getValue() >= cards.size()) {
+            selectedCardIndex.setValue(cards.isEmpty() ? 0 : cards.size() - 1);
+        }
+    }
+
+    public void shuffle() {
+        selectedCardIndex.setValue(0);
+        Collections.shuffle(cards);
+    }
+
+    public void SelectNext() {
+        int index = selectedCardIndex.get();
+        if (index >= cards.size() - 1) {
+            selectedCardIndex.setValue(cards.isEmpty() ? 0 : cards.size() - 1);
+        }
+
+        selectedCardIndex.setValue(index + 1);
+    }
+
+    public void SelectPrevious() {
+        int index = selectedCardIndex.get();
+        if (index <= 0) {
+            selectedCardIndex.setValue(0);
+        }
+
+        selectedCardIndex.setValue(index - 1);
+    }
+
+    public StringProperty getTitleProperty() {
+        return title;
+    }
+
+    public String getTitle() {
+        return title.getValue();
+    }
+
+    public void setTitle(String newTitle) {
+        title.setValue(newTitle);
+    }
+
+    public StringProperty getDescriptionProperty() {
+        return description;
+    }
+
+    public String getDescription() {
+        return description.getValue();
+    }
+
+    public void setDescription(String newDescription) {
+        description.setValue(newDescription);
+    }
+
+    public Card getSelectedCard() {
+        int index = selectedCardIndex.get();
+        return (index >= 0 && index < cards.size()) ? cards.get(index) : null;
+    }
+
+    public IntegerProperty getSelectedCardIndexProperty() {
+        return selectedCardIndex;
+    }
+
+    public int getSelectedCardIndex() {
+        return selectedCardIndex.get();
+    }
+
+    public void setSelectedCardIndex(int newSelectedIndex) {
+        selectedCardIndex.setValue(newSelectedIndex);
+    }
+}
