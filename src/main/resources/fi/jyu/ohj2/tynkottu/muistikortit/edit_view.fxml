@@ -13,8 +13,8 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <TextField fx:id="deckTitleField" />
-            <TextArea fx:id="deckDescriptionArea" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+            <TextField fx:id="deckTitleField" promptText="Deck Title" />
+            <TextArea fx:id="deckDescriptionArea" prefHeight="200.0" prefWidth="200.0" promptText="Deck Description" wrapText="true" VBox.vgrow="ALWAYS" />
             <Label fx:id="cardCountLabel" text="Label" textFill="#535353" />
          </children>
       </VBox>
@@ -22,8 +22,8 @@
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TextField fx:id="cardTitleField" />
-                  <TextArea fx:id="cardDescriptionArea" prefHeight="200.0" prefWidth="200.0" />
+                  <TextField fx:id="cardTitleField" promptText="Card Title" />
+                  <TextArea fx:id="cardDescriptionArea" prefHeight="200.0" prefWidth="200.0" promptText="Card Description" wrapText="true" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <TableView fx:id="cardTable" prefHeight="200.0" prefWidth="200.0" />

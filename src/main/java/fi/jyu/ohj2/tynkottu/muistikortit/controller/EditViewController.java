@@ -1,7 +1,9 @@
 package fi.jyu.ohj2.tynkottu.muistikortit.controller;
 
 import fi.jyu.ohj2.tynkottu.muistikortit.App;
-import javafx.event.ActionEvent;
+import fi.jyu.ohj2.tynkottu.muistikortit.model.Card;
+import fi.jyu.ohj2.tynkottu.muistikortit.model.Deck;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,48 +23,104 @@ public class EditViewController implements Initializable {
     @FXML
     private Label cardCountLabel;
     @FXML
-    private Button cardCreateButton;
+    private Button exitButton;
     @FXML
     private Button cardDeleteButton;
     @FXML
-    private Button exitButton;
-    @FXML
     private TextArea cardDescriptionArea;
     @FXML
-    private TableView<Void> cardTable;
+    private TableView<Card> cardTable;
     @FXML
     private TextField cardTitleField;
     @FXML
     private TextArea deckDescriptionArea;
     @FXML
     private TextField deckTitleField;
+    private Deck deck;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        TableColumn<Void, String> title = new TableColumn<>("Title");
+        TableColumn<Card, String> title = new TableColumn<>("Title");
+        title.setCellValueFactory(cd -> cd.getValue().getTitleProperty());
         cardTable.getColumns().add(title);
 
-        TableColumn<Void, String> description = new TableColumn<>("Description");
+        TableColumn<Card, String> description = new TableColumn<>("Description");
+        description.setCellValueFactory(cd -> cd.getValue().getDescriptionProperty());
         cardTable.getColumns().add(description);
+
+        cardTable.getSelectionModel().selectedItemProperty().addListener((_, oldCard, newCard) -> {
+            saveCardData(oldCard);
+            updateCardDisplay(newCard);
+        });
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+
+        cardTable.setItems(deck.getCards());
+
+        deckTitleField.setText(deck.getTitle());
+        deckDescriptionArea.setText(deck.getDescription());
+        cardCountLabel.setText("Cards: " + deck.size());
+        deck.getCards().addListener((ListChangeListener<Card>) change ->
+                cardCountLabel.setText("Cards: " + change.getList().size()));
+        updateCardDisplay(null);
+    }
+
+    public void updateCardDisplay(Card card) {
+        if (card == null) {
+            cardDeleteButton.setDisable(true);
+            cardTitleField.setDisable(true);
+            cardDescriptionArea.setDisable(true);
+
+            cardTitleField.setText("");
+            cardDescriptionArea.setText("");
+            return;
+        }
+
+        cardDeleteButton.setDisable(false);
+        cardTitleField.setDisable(false);
+        cardDescriptionArea.setDisable(false);
+
+        cardTitleField.setText(card.getTitle());
+        cardDescriptionArea.setText(card.getDescription());
+    }
+
+    public void saveCardData(Card card) {
+        if (card == null) {
+            return;
+        }
+
+        card.setTitle(cardTitleField.getText());
+        card.setDescription(cardDescriptionArea.getText());
+    }
+
+    public void saveDeckData() {
+        deck.setTitle(deckTitleField.getText());
+        deck.setDescription(deckDescriptionArea.getText());
     }
 
     @FXML
-    void handleCardCreate(ActionEvent event) {
-        IO.println("Create Card");
+    void handleCardCreate() {
+        deck.addCard("", "");
+        cardTable.getSelectionModel().select(deck.getCards().getLast());
+        cardTitleField.requestFocus();
     }
 
     @FXML
-    void handleCardDelete(ActionEvent event) {
-        IO.println("Delete Card");
+    void handleCardDelete() {
+        Card card = cardTable.getSelectionModel().getSelectedItem();
+        deck.removeCard(card);
     }
 
     @FXML
-    void handleSave(ActionEvent event) {
-        IO.println("Saved");
+    void handleSave() {
+        saveCardData(cardTable.getSelectionModel().getSelectedItem());
+        saveDeckData();
     }
 
     @FXML
-    void handleExit(ActionEvent event) {
+    void handleExit() {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("deck_view.fxml"));
             Stage stage = (Stage) exitButton.getScene().getWindow();

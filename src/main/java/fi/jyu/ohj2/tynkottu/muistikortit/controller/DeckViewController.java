@@ -107,7 +107,7 @@ public class DeckViewController implements Initializable {
 
     @FXML
     public void handleDeckCreate() {
-        deckCollection.addDeck("Title", "Description");
+        deckCollection.addDeck("Title", "");
         deckCollection.setSelectedDeckIndex(deckCollection.size() - 1);
 
         updateDisplays();
@@ -126,6 +126,9 @@ public class DeckViewController implements Initializable {
             Stage stage = (Stage) deckCenterButton.getScene().getWindow();
             stage.setTitle("Flashcards Edit");
             stage.setScene(new Scene(loader.load()));
+
+            EditViewController controller = loader.getController();
+            controller.setDeck(deckCollection.getSelectedDeck());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
