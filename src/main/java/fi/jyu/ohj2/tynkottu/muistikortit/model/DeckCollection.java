@@ -16,12 +16,7 @@ public class DeckCollection {
 
     private final IntegerProperty selectedDeckIndex = new SimpleIntegerProperty(0);
 
-    public DeckCollection() {
-    }
-
-    public ObservableList<Deck> getDecks() {
-        return decks;
-    }
+    public DeckCollection() { }
 
     public int size() {
         return decks.size();
@@ -32,26 +27,41 @@ public class DeckCollection {
     }
 
     public void removeDeck(Deck deck) {
-        if (deck != null) {
-            decks.remove(deck);
+        if (deck == null) {
+            return;
         }
+
+        decks.remove(deck);
+        setSelectedDeckIndex(selectedDeckIndex.get());
     }
 
-    public void SelectNext() {
-        int index = selectedDeckIndex.get();
-        if (index >= decks.size() - 1) {
-            selectedDeckIndex.setValue(decks.isEmpty() ? 0 : decks.size() - 1);
-        }
-
-        selectedDeckIndex.setValue(index + 1);
+    public void selectNext() {
+        setSelectedDeckIndex(selectedDeckIndex.get() + 1);
     }
 
-    public void SelectPrevious() {
-        int index = selectedDeckIndex.get();
-        if (index <= 0) {
-            selectedDeckIndex.setValue(0);
-        }
+    public void selectPrevious() {
+        setSelectedDeckIndex(selectedDeckIndex.get() - 1);
+    }
 
-        selectedDeckIndex.setValue(index - 1);
+    public Deck getSelectedDeck() {
+        int index = selectedDeckIndex.get();
+        return (index >= 0 && index < decks.size()) ? decks.get(index) : null;
+    }
+
+    public Deck getOffsetDeck(int offset) {
+        int index = selectedDeckIndex.get() + offset;
+        return (index >= 0 && index < decks.size()) ? decks.get(index) : null;
+    }
+
+    public IntegerProperty getSelectedDeckIndexProperty() {
+        return selectedDeckIndex;
+    }
+
+    public int getSelectedDeckIndex() {
+        return selectedDeckIndex.get();
+    }
+
+    public void setSelectedDeckIndex(int newSelectedIndex) {
+        selectedDeckIndex.setValue(Math.clamp(newSelectedIndex, 0, decks.isEmpty() ? 0 :  decks.size() - 1));
     }
 }

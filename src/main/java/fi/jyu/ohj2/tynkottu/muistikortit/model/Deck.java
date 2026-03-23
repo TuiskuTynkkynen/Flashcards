@@ -36,7 +36,6 @@ public class Deck {
         return cards.size();
     }
 
-
     public void addCard(String title, String description) {
         cards.add(new Card(title, description));
     }
@@ -47,32 +46,21 @@ public class Deck {
         }
 
         cards.remove(card);
-        if (selectedCardIndex.getValue() >= cards.size()) {
-            selectedCardIndex.setValue(cards.isEmpty() ? 0 : cards.size() - 1);
-        }
+        setSelectedCardIndex(selectedCardIndex.get());
     }
 
     public void shuffle() {
         selectedCardIndex.setValue(0);
         Collections.shuffle(cards);
+        cards.forEach(card -> card.setFlipped(false));
     }
 
-    public void SelectNext() {
-        int index = selectedCardIndex.get();
-        if (index >= cards.size() - 1) {
-            selectedCardIndex.setValue(cards.isEmpty() ? 0 : cards.size() - 1);
-        }
-
-        selectedCardIndex.setValue(index + 1);
+    public void selectNext() {
+        setSelectedCardIndex(selectedCardIndex.get() - 1);
     }
 
-    public void SelectPrevious() {
-        int index = selectedCardIndex.get();
-        if (index <= 0) {
-            selectedCardIndex.setValue(0);
-        }
-
-        selectedCardIndex.setValue(index - 1);
+    public void selectPrevious() {
+        setSelectedCardIndex(selectedCardIndex.get() - 1);
     }
 
     public StringProperty getTitleProperty() {
@@ -113,6 +101,6 @@ public class Deck {
     }
 
     public void setSelectedCardIndex(int newSelectedIndex) {
-        selectedCardIndex.setValue(newSelectedIndex);
+        selectedCardIndex.setValue(Math.clamp(newSelectedIndex, 0, cards.isEmpty() ? 0 : cards.size() - 1));
     }
 }
