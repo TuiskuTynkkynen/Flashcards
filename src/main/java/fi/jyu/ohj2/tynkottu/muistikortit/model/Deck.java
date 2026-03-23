@@ -56,7 +56,7 @@ public class Deck {
     }
 
     public void selectNext() {
-        setSelectedCardIndex(selectedCardIndex.get() - 1);
+        setSelectedCardIndex(selectedCardIndex.get() + 1);
     }
 
     public void selectPrevious() {

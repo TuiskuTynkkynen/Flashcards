@@ -59,6 +59,9 @@ public class DeckViewController implements Initializable {
             Stage stage = (Stage) deckCenterButton.getScene().getWindow();
             stage.setTitle("Flashcards Play");
             stage.setScene(new Scene(loader.load()));
+
+            CardViewController controller = loader.getController();
+            controller.setDeck(deckCollection.getSelectedDeck());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -106,6 +109,7 @@ public class DeckViewController implements Initializable {
     public void handleDeckCreate() {
         deckCollection.addDeck("Title", "Description");
         deckCollection.setSelectedDeckIndex(deckCollection.size() - 1);
+
         updateDisplays();
     }
 
