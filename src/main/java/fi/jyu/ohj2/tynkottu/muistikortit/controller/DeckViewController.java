@@ -49,6 +49,7 @@ public class DeckViewController implements Initializable {
             }
         });
 
+        deckCollection.deserialize();
         deckCollection.getSelectedDeckIndexProperty().addListener(_ -> updateDisplays());
         updateDisplays();
     }

@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.Collections;
+import java.util.List;
 
 public class Deck {
     private final StringProperty title = new SimpleStringProperty("");
@@ -30,6 +31,12 @@ public class Deck {
 
     public ObservableList<Card> getCards() {
         return cards;
+    }
+
+    @SuppressWarnings("unused")
+    public void setCards(List<Card> cards) {
+        this.cards.clear();
+        this.cards.addAll(cards);
     }
 
     public int size() {
