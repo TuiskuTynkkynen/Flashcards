@@ -41,17 +41,22 @@ public class EditViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         TableColumn<Card, String> title = new TableColumn<>("Title");
-        title.setCellValueFactory(cd -> cd.getValue().getTitleProperty());
+        title.setCellValueFactory(cd -> {
+            if (cd.getValue().getTitle().isEmpty()) {
+                cd.getValue().setTitle("Untitled");
+            }
+            return cd.getValue().getTitleProperty();
+        });
         cardTable.getColumns().add(title);
 
         TableColumn<Card, String> description = new TableColumn<>("Description");
         description.setCellValueFactory(cd -> cd.getValue().getDescriptionProperty());
         cardTable.getColumns().add(description);
 
-        cardTable.getSelectionModel().selectedItemProperty().addListener((_, oldCard, newCard) -> {
-            saveCardData(oldCard);
-            updateCardDisplay(newCard);
-        });
+        cardTable.getSelectionModel().selectedItemProperty().addListener((_, _, newCard) -> updateCardDisplay(newCard));
+
+        cardTitleField.textProperty().addListener(_ -> saveCardData(cardTable.getSelectionModel().getSelectedItem()));
+        cardDescriptionArea.textProperty().addListener(_ -> saveCardData(cardTable.getSelectionModel().getSelectedItem()));
     }
 
     public void setDeck(Deck deck) {
@@ -61,6 +66,9 @@ public class EditViewController implements Initializable {
 
         deckTitleField.setText(deck.getTitle());
         deckDescriptionArea.setText(deck.getDescription());
+        deckTitleField.textProperty().addListener(_ -> saveDeckData());
+        deckDescriptionArea.textProperty().addListener(_ -> saveDeckData());
+
         cardCountLabel.setText("Cards: " + deck.size());
         deck.getCards().addListener((ListChangeListener<Card>) change ->
                 cardCountLabel.setText("Cards: " + change.getList().size()));
@@ -82,8 +90,9 @@ public class EditViewController implements Initializable {
         cardTitleField.setDisable(false);
         cardDescriptionArea.setDisable(false);
 
-        cardTitleField.setText(card.getTitle());
-        cardDescriptionArea.setText(card.getDescription());
+        String title = card.getTitle(), description = card.getDescription();
+        cardTitleField.setText(title);
+        cardDescriptionArea.setText(description);
     }
 
     public void saveCardData(Card card) {
@@ -91,13 +100,13 @@ public class EditViewController implements Initializable {
             return;
         }
 
-        card.setTitle(cardTitleField.getText());
-        card.setDescription(cardDescriptionArea.getText());
+        card.setTitle(cardTitleField.getText().trim());
+        card.setDescription(cardDescriptionArea.getText().trim());
     }
 
     public void saveDeckData() {
-        deck.setTitle(deckTitleField.getText());
-        deck.setDescription(deckDescriptionArea.getText());
+        deck.setTitle(deckTitleField.getText().trim());
+        deck.setDescription(deckDescriptionArea.getText().trim());
     }
 
     @FXML
@@ -111,12 +120,6 @@ public class EditViewController implements Initializable {
     void handleCardDelete() {
         Card card = cardTable.getSelectionModel().getSelectedItem();
         deck.removeCard(card);
-    }
-
-    @FXML
-    void handleSave() {
-        saveCardData(cardTable.getSelectionModel().getSelectedItem());
-        saveDeckData();
     }
 
     @FXML
