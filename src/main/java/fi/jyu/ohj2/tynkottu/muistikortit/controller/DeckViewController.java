@@ -63,6 +63,8 @@ public class DeckViewController implements Initializable {
 
             CardViewController controller = loader.getController();
             controller.setDeck(deckCollection.getSelectedDeck());
+
+            deckCollection.serialize();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -129,6 +131,8 @@ public class DeckViewController implements Initializable {
 
             EditViewController controller = loader.getController();
             controller.setDeck(deckCollection.getSelectedDeck());
+
+            deckCollection.serialize();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -102,5 +102,7 @@ public class DeckCollection {
         } catch (JacksonException je) {
             IO.println("Deserialization failed, could not read JSON: " + je.getMessage());
         }
+
+        serialize();
     }
 }
