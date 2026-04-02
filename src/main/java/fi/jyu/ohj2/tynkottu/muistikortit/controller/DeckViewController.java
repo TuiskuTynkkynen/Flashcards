@@ -109,7 +109,6 @@ public class DeckViewController implements Initializable {
     @FXML
     public void handleDeckCreate() {
         deckCollection.addDeck("Title", "");
-        deckCollection.setSelectedDeckIndex(deckCollection.size() - 1);
 
         updateDisplays();
     }

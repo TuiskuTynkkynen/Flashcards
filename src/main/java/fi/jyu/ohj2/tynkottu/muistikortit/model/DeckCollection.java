@@ -40,6 +40,7 @@ public class DeckCollection {
 
     public void addDeck(String title, String description) {
         decks.add(new Deck(title, description));
+        setSelectedDeckIndex(decks.size() - 1);
     }
 
     public void removeDeck(Deck deck) {
