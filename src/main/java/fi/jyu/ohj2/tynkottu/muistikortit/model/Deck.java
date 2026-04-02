@@ -25,8 +25,8 @@ public class Deck {
     public Deck() { }
 
     public Deck(String title, String description) {
-        this.title.setValue(title);
-        this.description.setValue(description);
+        setTitle(title);
+        setDescription(description);
     }
 
     public ObservableList<Card> getCards() {
@@ -79,7 +79,7 @@ public class Deck {
     }
 
     public void setTitle(String newTitle) {
-        title.setValue(newTitle);
+        title.setValue(newTitle.trim());
     }
 
     public StringProperty getDescriptionProperty() {
@@ -91,7 +91,7 @@ public class Deck {
     }
 
     public void setDescription(String newDescription) {
-        description.setValue(newDescription);
+        description.setValue(newDescription.trim());
     }
 
     public Card getSelectedCard() {

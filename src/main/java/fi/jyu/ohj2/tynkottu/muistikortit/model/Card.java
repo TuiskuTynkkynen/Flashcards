@@ -14,8 +14,8 @@ public class Card {
     public Card() { }
 
     public Card(String title, String description) {
-        this.title.setValue(title);
-        this.description.setValue(description);
+        setTitle(title);
+        setDescription(description);
     }
 
     public StringProperty getTitleProperty() {
@@ -27,7 +27,7 @@ public class Card {
     }
 
     public void setTitle(String newTitle) {
-        title.setValue(newTitle);
+        title.setValue(newTitle.trim());
     }
 
     public StringProperty getDescriptionProperty() {
@@ -39,7 +39,7 @@ public class Card {
     }
 
     public void setDescription(String newDescription) {
-        description.setValue(newDescription);
+        description.setValue(newDescription.trim());
     }
 
     public BooleanProperty getFlippedProperty() {

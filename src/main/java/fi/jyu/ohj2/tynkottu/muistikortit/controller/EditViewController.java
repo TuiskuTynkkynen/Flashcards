@@ -121,13 +121,13 @@ public class EditViewController implements Initializable {
             return;
         }
 
-        card.setTitle(cardTitleField.getText().trim());
-        card.setDescription(cardDescriptionArea.getText().trim());
+        card.setTitle(cardTitleField.getText());
+        card.setDescription(cardDescriptionArea.getText());
     }
 
     void saveDeckData() {
-        deck.setTitle(deckTitleField.getText().trim());
-        deck.setDescription(deckDescriptionArea.getText().trim());
+        deck.setTitle(deckTitleField.getText());
+        deck.setDescription(deckDescriptionArea.getText());
     }
 
     void setErrorEnabled(Label errorLabel, boolean enabled) {
