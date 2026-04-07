@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -29,7 +28,7 @@ public class DeckViewController implements Initializable {
     @FXML
     private Label deckCenterLabel;
     @FXML
-    private Text deckCenterText;
+    private Label deckCenterDescriptionLabel;
     @FXML
     private Button deckCenterButton;
     @FXML
@@ -83,7 +82,7 @@ public class DeckViewController implements Initializable {
     private void setMainDeckDisplay(Deck deck) {
         if (deck == null) {
             deckCenterButton.setDisable(true);
-            deckCenterText.setText("Create a deck");
+            deckCenterDescriptionLabel.setText("Create a deck");
 
             deckCenterLabel.setVisible(false);
             deckEditButton.setVisible(false);
@@ -92,7 +91,7 @@ public class DeckViewController implements Initializable {
 
         deckCenterButton.setDisable(false);
         deckCenterLabel.setText(deck.getTitle());
-        deckCenterText.setText(deck.getDescription());
+        deckCenterDescriptionLabel.setText(deck.getDescription());
 
         deckCenterLabel.setVisible(true);
         deckEditButton.setVisible(true);
