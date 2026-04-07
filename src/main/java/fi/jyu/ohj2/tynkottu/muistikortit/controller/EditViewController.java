@@ -10,12 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -96,7 +91,7 @@ public class EditViewController implements Initializable {
         updateCardDisplay(null);
     }
 
-    public void updateCardDisplay(Card card) {
+    private void updateCardDisplay(Card card) {
         if (card == null) {
             cardDeleteButton.setDisable(true);
             cardTitleField.setDisable(true);
@@ -116,7 +111,7 @@ public class EditViewController implements Initializable {
         cardDescriptionArea.setText(description);
     }
 
-    public void saveCardData(Card card) {
+    private void saveCardData(Card card) {
         if (card == null) {
             return;
         }
@@ -125,17 +120,17 @@ public class EditViewController implements Initializable {
         card.setDescription(cardDescriptionArea.getText());
     }
 
-    void saveDeckData() {
+    private void saveDeckData() {
         deck.setTitle(deckTitleField.getText());
         deck.setDescription(deckDescriptionArea.getText());
     }
 
-    void setErrorEnabled(Label errorLabel, boolean enabled) {
+    private void setErrorEnabled(Label errorLabel, boolean enabled) {
         errorLabel.setVisible(enabled);
         errorLabel.setPadding(new Insets(enabled ? 0 : -100));
     }
 
-    boolean validateCard(Card card) {
+    private boolean validateCard(Card card) {
         if (card == null) {
             return true;
         }
@@ -151,7 +146,7 @@ public class EditViewController implements Initializable {
         return !invalidTitle && !invalidDescription;
     }
 
-    boolean validateCards() {
+    private boolean validateCards() {
         for (Card card : deck.getCards()) {
             if (!validateCard(card)) {
                 cardTable.getSelectionModel().select(card);
@@ -161,7 +156,7 @@ public class EditViewController implements Initializable {
         return true;
     }
 
-    boolean validateDeck() {
+    private boolean validateDeck() {
         boolean invalidTitle = deck.getTitle().isBlank();
         setErrorEnabled(deckTitleError, invalidTitle);
         if (invalidTitle) deckTitleField.requestFocus();
@@ -170,7 +165,7 @@ public class EditViewController implements Initializable {
     }
 
     @FXML
-    void handleCardCreate() {
+    private void handleCardCreate() {
         if (!validateCard(cardTable.getSelectionModel().getSelectedItem())) return;
         deck.addCard("", "");
         cardTable.getSelectionModel().select(deck.getCards().getLast());
@@ -178,7 +173,7 @@ public class EditViewController implements Initializable {
     }
 
     @FXML
-    void handleCardDelete() {
+    private void handleCardDelete() {
         Card card = cardTable.getSelectionModel().getSelectedItem();
         card.setTitle("deleted");
         card.setDescription("deleted");
@@ -186,7 +181,7 @@ public class EditViewController implements Initializable {
     }
 
     @FXML
-    void handleExit() {
+    private void handleExit() {
         if (!validateDeck() || !validateCards()) return;
 
         try {

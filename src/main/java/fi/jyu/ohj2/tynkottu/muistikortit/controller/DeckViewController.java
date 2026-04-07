@@ -108,20 +108,20 @@ public class DeckViewController implements Initializable {
     }
 
     @FXML
-    public void handleDeckCreate() {
+    private void handleDeckCreate() {
         deckCollection.addDeck("Title", "");
 
         updateDisplays();
     }
 
     @FXML
-    public void handleDeckDelete() {
+    private void handleDeckDelete() {
         deckCollection.removeDeck(deckCollection.getSelectedDeck());
         updateDisplays();
     }
 
     @FXML
-    public void handleDeckEdit() {
+    private void handleDeckEdit() {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("edit_view.fxml"));
             Stage stage = (Stage) deckCenterButton.getScene().getWindow();
@@ -138,12 +138,12 @@ public class DeckViewController implements Initializable {
     }
 
     @FXML
-    public void handleDeckLeft() {
+    private void handleDeckLeft() {
         deckCollection.selectPrevious();
     }
 
     @FXML
-    public void handleDeckRight() {
+    private void handleDeckRight() {
         deckCollection.selectNext();
     }
 }

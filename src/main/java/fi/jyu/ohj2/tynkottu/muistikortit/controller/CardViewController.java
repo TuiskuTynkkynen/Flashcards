@@ -67,17 +67,17 @@ public class CardViewController {
     }
 
     @FXML
-    void handleCardLeft() {
+    private void handleCardLeft() {
         deck.selectPrevious();
     }
 
     @FXML
-    void handleCardRight() {
+    private void handleCardRight() {
         deck.selectNext();
     }
 
     @FXML
-    void handleCardTurn() {
+    private void handleCardTurn() {
         Card card = deck.getSelectedCard();
         if (card != null) {
             card.setFlipped(!card.getFlipped());
@@ -86,7 +86,7 @@ public class CardViewController {
     }
 
     @FXML
-    void handleExit() {
+    private void handleExit() {
         try {
             FXMLLoader loader = new FXMLLoader(App.class.getResource("deck_view.fxml"));
             Stage stage = (Stage) exitButton.getScene().getWindow();
